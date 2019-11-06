@@ -5,7 +5,7 @@ import com.baizhi.service.AdminService;
 
 import javax.swing.*;
 
-public class AdminAction {
+public class AdminAction {//已经从本地下载并且修改过
     //接收数据
     private Admin admin;
     private String adminname;
