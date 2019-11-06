@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+
+    <!--读取小配置文件 web项目与需要加: classpath:-->
+    <context:property-placeholder location="classpath:jdbc.properties"></context:property-placeholder>
+
+    <!--使用druid连接池-->
+    <!--加载数据源-->
+       <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+           <property name="driverClassName" value="${driver}"></property>
+           <property name="url" value="${url}"></property>
+           <property name="username" value="${name}"></property>
+           <property name="password" value="${password}"></property>
+       </bean>
+
+    <!--自动构建sqlsession工厂-->
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--引入数据源-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--给实体类起别名-->
+        <property name="typeAliasesPackage">
+             <value>com.baizhi.entity</value>
+        </property>
+        <!--mapper文件的注册-->
+        <property name="mapperLocations">
+            <list>
+                <value>
+                   classpath:com/baizhi/dao/*Mapper.xml
+                </value>
+            </list>
+        </property>
+    </bean>
+
+    <!--自动实现dao类对象-->
+    <bean id="scannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage">
+            <value>com.baizhi.dao</value>
+        </property>
+    </bean>
+
+    <!--配置AdminserviceImpl-->
+    <bean id="adminService" class="com.baizhi.service.AdminServiceImpl">
+        <property name="adminDAO" ref="adminDAO"/>
+    </bean>
+
+    <!--配置departmentServiceImpl-->
+    <bean id="departMentService" class="com.baizhi.service.DepartMentServiceImpl">
+        <property name="departmentDAO" ref="departmentDAO"></property>
+        <property name="employeeDAO" ref="employeeDAO"></property>
+    </bean>
+
+    <!--配置employeeServiceImpl-->
+
+    <bean id="employeeService" class="com.baizhi.service.EmployeeServiceImpl">
+        <property name="employeeDAO" ref="employeeDAO"></property>
+    </bean>
+
+    <!--引入额外功能事物-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--描述事物-->
+    <tx:advice id="dstm" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!--增删改-->
+            <tx:method name="modify*"/>
+            <!--查询-->
+            <tx:method name="*" propagation="SUPPORTS" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+
+    <!--配置切入点-->
+    <aop:config>
+        <aop:pointcut id="pc" expression="execution(* com.baizhi.service..*.*(..))"></aop:pointcut>
+        <!--组装切面-->
+        <aop:advisor advice-ref="dstm" pointcut-ref="pc"></aop:advisor>
+     </aop:config>
+
+    <!--配置action的相关信息-->
+    <bean id="adminAction" class="com.baizhi.action.AdminAction">
+        <!--上面的service注入-->
+        <property name="adminService" ref="adminService"></property>
+    </bean>
+
+    <!--配置departmentaction-->
+    <bean id="departMentAction" class="com.baizhi.action.DepartMentAction">
+        <!--事物的注入-->
+        <property name="departmentService" ref="departMentService"></property>
+    </bean>
+
+    <bean id="employeeAction" class="com.baizhi.action.EmployeeAction">
+        <property name="employeeService" ref="employeeService"></property>
+    </bean>
+
+
+</beans>

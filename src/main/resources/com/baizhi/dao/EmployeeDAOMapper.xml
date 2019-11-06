@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.baizhi.dao.EmployeeDAO">
+    <!--查询所有员工-->
+    <select id="queryAll" resultType="Employee" parameterType="java.lang.String">
+        select id,employeename,employeesalary,employeeage,employeedepartmentname from d_employee where employeedepartmentid=#{employeedepartmentid}
+    </select>
+    <!--查询要修改的ID-->
+    <select id="queryEmployee" parameterType="java.lang.String" resultType="Employee">
+        select id,employeename,employeesalary,employeeage,employeedepartmentid,employeedepartmentname from d_employee where id=#{id}
+    </select>
+    <!--修改员工-->
+    <update id="updateEmployee" parameterType="Employee">
+        update d_employee set employeename=#{employeename,jdbcType=NULL},employeesalary=#{employeesalary,jdbcType=NULL},
+               employeeage=#{employeeage,jdbcType=NULL},employeedepartmentid=#{employeedepartmentid,jdbcType=NULL},
+               employeedepartmentname=#{employeedepartmentname,jdbcType=NULL}
+          where id=#{id}
+    </update>
+    <!--删除员工-->
+    <delete id="deleteEmployee" parameterType="java.lang.String">
+        delete from d_employee where id=#{id}
+    </delete>
+    <!--添加员工-->
+    <insert id="addEmployee" parameterType="Employee">
+        insert into d_employee (id,employeename,employeesalary,employeeage,employeedepartmentid,employeedepartmentname)
+         values (#{id,jdbcType=NULL},
+         #{employeename,jdbcType=NULL},
+         #{employeesalary,jdbcType=NULL},
+         #{employeeage,jdbcType=NULL},
+         #{employeedepartmentid,jdbcType=NULL},
+         #{employeedepartmentname,jdbcType=NULL})
+    </insert>
+    
+    <!--ajax开发-->
+     <select id="selectAllDepartment" resultType="Department">
+         select * from d_department
+     </select>
+
+    <!--通过ID查询部门的名称-->
+    <select id="selectDepartment" parameterType="java.lang.String" resultType="Department">
+        select departmentname from d_department where id=#{id}
+    </select>
+</mapper>

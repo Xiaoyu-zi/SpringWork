@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <package name="department" extends="struts-default" namespace="/department">
+        <!--展示所有部门-->
+        <action name="show" class="departMentAction" method="show">
+             <result name="success">/departments.jsp</result>
+        </action>
+
+        <!--添加部门-->
+        <action name="add" class="departMentAction" method="add">
+            <result name="success" type="redirect">show</result>
+        </action>
+
+        <!--查询要修改部门的ID-->
+        <action name="queryID" class="departMentAction" method="queryID">
+        <result name="success" type="dispatcher">/updateDeparments.jsp</result>
+    </action>
+
+        <!--修改部门-->
+        <action name="update" class="departMentAction" method="update">
+            <result name="success" type="redirectAction">show</result>
+        </action>
+    </package>
+</struts>

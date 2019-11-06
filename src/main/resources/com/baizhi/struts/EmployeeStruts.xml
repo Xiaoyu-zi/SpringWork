@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <package name="employee" extends="struts-default" namespace="/employee">
+        <!--展示-->
+        <action name="show" class="employeeAction" method="show">
+            <result name="success">/emplist.jsp</result>
+        </action>
+
+        <!--要修改的信息-->
+        <action name="queryEmployee" class="employeeAction" method="queryEmployee">
+            <result name="success">/updateEmp.jsp</result>
+        </action>
+
+        <!--=修改员工-->
+        <action name="update" class="employeeAction" method="update">
+            <result name="success" type="redirect">
+                <param name="namespace">/department</param>
+                <param name="actionName">show</param>
+            </result>
+        </action>
+
+        <!--删除员工-->
+        <action name="delete" class="employeeAction" method="delete">
+            <result name="success">show</result>
+        </action>
+
+        <!--添加员工,跳到展示部门-->
+        <action name="add" class="employeeAction" method="add">
+            <result name="success" type="redirectAction">
+                <param name="namespace">/department</param>
+                <param name="actionName">show</param>
+            </result>
+        </action>
+
+        <!--ajax中JSON协议串-->
+        <action name="querydepartment" class="employeeAction" method="querydepartment">
+        </action>
+
+    </package>
+</struts>

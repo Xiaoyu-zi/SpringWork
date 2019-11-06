@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.baizhi.dao.AdminDAO">
+    <!--管理员登录-->
+    <select id="queryAdmin" resultType="Admin">
+          select * from d_admin where adminname=#{adminname}and adminpassword=#{adminpassword}
+    </select>
+    <!--管理员注册-->
+    <insert id="registerAdmin" parameterType="Admin">
+        insert into d_admin (id,adminname,adminrealname,adminpassword,adminsex) values (#{id},#{adminname},#{adminrealname},#{adminpassword},#{adminsex})
+    </insert>
+
+
+
+</mapper>

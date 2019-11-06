@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <include file="com/baizhi/struts/DepartMentStruts.xml"></include>
+    <package name="admin" extends="struts-default" namespace="/admin">
+        <action name="login" class="adminAction" method="login">
+            <!--跨包跳转-->
+            <result name="success" type="redirectAction">
+                <param name="namespace">/department</param>
+                <param name="actionName">show</param>
+            </result>
+            <result name="error">/login.jsp</result>
+        </action>
+
+        <action name="regsister" class="adminAction" method="regsister">
+            <result name="success">/login.jsp</result>
+        </action>
+    </package>
+</struts>
